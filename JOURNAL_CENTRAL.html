@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Journal Central — Toutes Agences</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css"/>
+<style>:root{--pr:#1D9E75;--prd:#0F6E56;--bg:#fff;--bg2:#f5f5f3;--bg3:#efefed;--tx:#1a1a18;--tx2:#6b6b65;--tx3:#9b9b95;--bd:rgba(0,0,0,0.12);--bd2:rgba(0,0,0,0.25);--rm:8px;--rl:12px;--gs:#EAF3DE;--gt:#27500A;--ws:#FAEEDA;--wt:#633806;--ds:#FCEBEB;--dt:#791F1F;--is:#E6F1FB;--it:#0C447C}
+@media(prefers-color-scheme:dark){:root{--bg:#1c1c1a;--bg2:#262624;--bg3:#2e2e2c;--tx:#f0f0ec;--tx2:#a0a09a;--tx3:#68685e;--bd:rgba(255,255,255,0.1);--bd2:rgba(255,255,255,0.22);--gs:#173404;--gt:#C0DD97;--ws:#412402;--wt:#FAC775;--ds:#501313;--dt:#F09595;--is:#042C53;--it:#85B7EB}}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--tx);min-height:100vh}
+.pg{max-width:980px;margin:0 auto;padding:2rem 1rem}
+.hd{display:flex;align-items:center;gap:14px;margin-bottom:2rem}
+.hi{width:48px;height:48px;background:var(--pr);border-radius:var(--rm);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
+.ab{display:inline-flex;align-items:center;gap:6px;background:var(--is);color:var(--it);padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600;margin-top:4px}
+.sb{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600;margin-top:4px;margin-left:8px}
+.sb.on{background:var(--gs);color:var(--gt)}.sb.off{background:var(--ds);color:var(--dt)}
+.st{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+.sc{background:var(--bg);border-radius:var(--rm);padding:1rem;border:0.5px solid var(--bd)}
+.sl{font-size:12px;color:var(--tx2);margin-bottom:4px}.sv{font-size:24px;font-weight:600}
+.tb{display:flex;border:0.5px solid var(--bd);border-radius:var(--rm);overflow:hidden;margin-bottom:1.5rem;background:var(--bg)}
+.tab{flex:1;padding:11px 8px;font-size:14px;background:transparent;color:var(--tx2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:inherit;transition:background .12s}
+.tab.active{background:var(--bg2);color:var(--tx);font-weight:500}.tab:not(:last-child){border-right:0.5px solid var(--bd)}
+.cd{background:var(--bg);border:0.5px solid var(--bd);border-radius:var(--rl);margin-bottom:1.5rem;overflow:hidden}
+.cb{padding:1.25rem}.ct{font-size:14px;font-weight:500;color:var(--tx2);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.f2{grid-column:1/-1}.fp{display:flex;flex-direction:column;gap:6px}
+label{font-size:13px;color:var(--tx2);font-weight:500}
+input,select{width:100%;padding:8px 12px;border:0.5px solid var(--bd);border-radius:var(--rm);font-size:14px;background:var(--bg);color:var(--tx);font-family:inherit;height:38px}
+input:focus,select:focus{outline:none;border-color:var(--pr)}select:disabled{opacity:.75;cursor:not-allowed;background:var(--bg2)}
+.br{display:flex;gap:10px;justify-content:flex-end;margin-top:1.25rem}
+.bn{padding:9px 18px;border-radius:var(--rm);font-size:14px;cursor:pointer;border:0.5px solid var(--bd2);background:var(--bg);color:var(--tx);font-family:inherit;display:inline-flex;align-items:center;gap:7px;transition:background .12s}
+.bn:hover{background:var(--bg2)}.bn.p{background:var(--pr);color:#fff;border-color:var(--prd)}.bn.p:hover{background:var(--prd)}
+.bn.d{color:var(--dt);border-color:var(--ds);background:var(--ds)}.bn.sm{padding:5px 10px;font-size:12px}.bn:disabled{opacity:.5;cursor:not-allowed}
+.tr{display:flex;gap:8px;align-items:center;padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);flex-wrap:wrap}
+.tr input,.tr select{height:34px;font-size:13px}.tr input{width:190px}.tr select{width:140px}.tr-r{margin-left:auto;display:flex;gap:8px}
+table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+th{text-align:left;padding:9px 10px;font-size:12px;font-weight:500;color:var(--tx2);border-bottom:0.5px solid var(--bd);background:var(--bg2)}
+td{padding:9px 10px;border-bottom:0.5px solid var(--bd);vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg2)}
+.bg{font-size:11px;padding:3px 9px;border-radius:100px;display:inline-block;font-weight:500}
+.bg-s{background:var(--gs);color:var(--gt)}.bg-w{background:var(--ws);color:var(--wt)}.bg-d{background:var(--ds);color:var(--dt)}.bg-i{background:var(--is);color:var(--it)}
+.em{text-align:center;padding:3rem 1rem;color:var(--tx3);font-size:14px}
+.toast{position:fixed;bottom:24px;right:24px;padding:11px 20px;border-radius:var(--rm);font-size:13px;font-weight:500;display:none;z-index:999;color:#fff}
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:center;justify-content:center}
+.mo.open{display:flex}.md{background:var(--bg);border-radius:var(--rl);padding:1.75rem;width:100%;max-width:540px;border:0.5px solid var(--bd)}
+.md h3{font-size:16px;font-weight:600;margin-bottom:1.25rem}
+.lo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:200;align-items:center;justify-content:center}
+.lo.open{display:flex}.lb{background:var(--bg);border-radius:var(--rl);padding:2rem;text-align:center;font-size:14px;color:var(--tx2)}
+.sp{width:32px;height:32px;border:3px solid var(--bd);border-top-color:var(--pr);border-radius:50%;animation:rr .8s linear infinite;margin:0 auto 12px}
+@keyframes rr{to{transform:rotate(360deg)}}
+@media(max-width:600px){.st{grid-template-columns:repeat(2,1fr)}.fg{grid-template-columns:1fr}.f2{grid-column:1}.tr-r{margin-left:0;width:100%}}
+.hi{background:#534AB7 !important}.sb.on{background:var(--gs);color:var(--gt)}.sb.off{background:var(--ds);color:var(--dt)}</style>
+</head><body>
+<div class="pg">
+  <div class="hd"><div class="hi"><i class="ti ti-building-skyscraper"></i></div>
+    <div><div style="font-size:20px;font-weight:600">Journal Central — Vue consolidée</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap">
+        <span style="font-size:13px;color:var(--tx2)">Toutes agences — temps réel</span>
+        <span class="sb off" id="sb"><i class="ti ti-wifi-off"></i> Connexion...</span>
+      </div></div></div>
+  <div class="st" style="grid-template-columns:repeat(5,1fr)">
+    <div class="sc"><div class="sl">Total</div><div class="sv" id="st">—</div></div>
+    <div class="sc"><div class="sl">Entrées</div><div class="sv" id="si">—</div></div>
+    <div class="sc"><div class="sl">Sorties</div><div class="sv" id="so">—</div></div>
+    <div class="sc"><div class="sl">Blocage QS</div><div class="sv" id="sq">—</div></div>
+    <div class="sc"><div class="sl">Agences actives</div><div class="sv" id="sa">—</div></div>
+  </div>
+  <div class="cd">
+    <div class="tr">
+      <input type="text" id="fs" placeholder="Rechercher..." oninput="render()"/>
+      <select id="ft" onchange="render()"><option value="">Tous types</option><option>Entrée</option><option>Sortie</option></select>
+      <select id="fag" onchange="render()"><option value="">Toutes agences</option><option value="Magasin Central">Magasin Central</option><option value="Strasbourg">Strasbourg</option><option value="Caen">Caen</option><option value="Metz">Metz</option><option value="Bordeaux">Bordeaux</option><option value="Paris Nord">Paris Nord</option><option value="Paris Ouest">Paris Ouest</option><option value="Paris Sud">Paris Sud</option><option value="Dijon">Dijon</option><option value="Lille">Lille</option><option value="Rouen">Rouen</option><option value="Reims">Reims</option><option value="Troyes">Troyes</option><option value="Lyon">Lyon</option><option value="Annecy">Annecy</option><option value="Nice">Nice</option><option value="Montpellier">Montpellier</option><option value="Marseille">Marseille</option><option value="Toulouse">Toulouse</option><option value="Pau">Pau</option><option value="Angers">Angers</option><option value="Vierzon">Vierzon</option><option value="Clermont">Clermont</option><option value="Quimper">Quimper</option></select>
+      <select id="fdst" onchange="render()" style="width:150px"><option value="">Toutes destinations</option><option>Soverp</option><option>Dinington</option><option>Maintenance</option></select>
+      <div class="tr-r"><button class="bn sm" onclick="exportCSV()"><i class="ti ti-download"></i> Export global CSV</button></div>
+    </div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr>
+        <th style="width:105px;cursor:pointer" onclick="sortBy('asset')">Asset tag ⇕</th>
+        <th style="width:70px;cursor:pointer" onclick="sortBy('type')">Type</th>
+        <th style="width:95px;cursor:pointer" onclick="sortBy('date')">Date ⇕</th>
+        <th style="width:120px;cursor:pointer" onclick="sortBy('saisie')">Agence saisie ⇕</th>
+        <th style="width:115px">Provenance</th>
+        <th style="width:75px">Bloc.QS</th>
+        <th style="width:105px">Destination</th>
+        <th>Remarque</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const fb = initializeApp({
+  apiKey: "AIzaSyDv53luEaoSaX1fTCVCy1OVD7pIqkRlYEQ",
+  authDomain: "journal-machines.firebaseapp.com",
+  projectId: "journal-machines",
+  storageBucket: "journal-machines.firebasestorage.app",
+  messagingSenderId: "1038248860133",
+  appId: "1:1038248860133:web:f3089ef9141e2db3d9370c"
+});
+const db = getFirestore(fb);
+const ref = collection(db,"mouvements");
+const qu = query(ref, orderBy("createdAt","desc"));
+let all=[]; let sc="date"; let sa=false;
+const sb = document.getElementById("sb");
+onSnapshot(qu, sn => {
+  all = sn.docs.map(d => ({_id:d.id,...d.data()}));
+  upd();
+  sb.className = "sb on";
+  sb.innerHTML = '<i class="ti ti-wifi"></i> Synchronisé — ' + all.length + ' enregistrements';
+}, () => { sb.className="sb off"; sb.innerHTML='<i class="ti ti-wifi-off"></i> Hors ligne'; });
+function upd() {
+  document.getElementById("st").textContent = all.length;
+  document.getElementById("si").textContent = all.filter(r=>r.type==="Entrée").length;
+  document.getElementById("so").textContent = all.filter(r=>r.type==="Sortie").length;
+  document.getElementById("sq").textContent = all.filter(r=>r.qs==="Oui").length;
+  const ags = [...new Set(all.map(r=>r.saisie).filter(Boolean))];
+  document.getElementById("sa").textContent = ags.length;
+  agFilter(); render();
+}
+function agFilter() {
+  const sel = document.getElementById("fag"); const cur = sel.value;
+  const ags = [...new Set(all.map(r=>r.saisie).filter(Boolean))].sort();
+  sel.innerHTML = '<option value="">Toutes agences</option>'
+    + ags.map(a => '<option value="'+a+'"'+(a===cur?' selected':'')+'>'+a+'</option>').join("");
+}
+function filtered() {
+  const q2 = (document.getElementById("fs").value || "").toLowerCase();
+  const ft = document.getElementById("ft").value || "";
+  const fa = document.getElementById("fag").value || "";
+  const fd = document.getElementById("fdst").value || "";
+  return all.filter(r => {
+    const mq = !q2 || Object.values(r).some(v => String(v).toLowerCase().includes(q2));
+    return mq && (!ft||r.type===ft) && (!fa||r.saisie===fa) && (!fd||r.dest===fd);
+  });
+}
+function render() {
+  const f = filtered();
+  const tb = document.getElementById("tbody");
+  if (!f.length) {
+    tb.innerHTML = '<tr><td colspan="8"><div class="em"><i class="ti ti-database" style="font-size:28px;display:block;margin-bottom:8px"></i>Les saisies apparaissent ici en temps réel</div></td></tr>';
+    return;
+  }
+  let fs = filtered();
+  fs.sort((a,b) => { const va=a[sc]||""; const vb=b[sc]||""; return sa?va.localeCompare(vb):vb.localeCompare(va); });
+  tb.innerHTML = fs.map(r => {
+    const qs = r.qs ? '<span class="bg '+(r.qs==="Oui"?"bg-d":"")+'">'+r.qs+'</span>' : "—";
+    const dst = (r.dest&&r.dest!=="—") ? '<span class="bg bg-i">'+r.dest+'</span>' : "—";
+    return '<tr>'
+      + '<td style="font-weight:500">'+r.asset+'</td>'
+      + '<td><span class="bg '+(r.type==="Entrée"?"bg-s":"bg-w")+'">'+r.type+'</span></td>'
+      + '<td>'+r.date+'</td>'
+      + '<td><span class="bg bg-i">'+(r.saisie||"—")+'</span></td>'
+      + '<td>'+(r.agence||"—")+'</td>'
+      + '<td>'+qs+'</td>'
+      + '<td>'+dst+'</td>'
+      + '<td style="color:var(--tx2)">'+(r.note||"—")+'</td>'
+      + '</tr>';
+  }).join("");
+}
+function sortBy(col) { if(sc===col) sa=!sa; else {sc=col;sa=true;} render(); }
+function exportCSV() {
+  const f = filtered();
+  if (!f.length) { alert("Aucune donnée"); return; }
+  const h = ["Asset tag","Type","Date","Agence saisie","Agence provenance","Blocage QS","Destination","Remarque"];
+  const rows = f.map(r => [r.asset,r.type,r.date,r.saisie||"",r.agence,r.qs||"",r.dest,r.note]
+    .map(v => '"' + String(v||"").replace(/"/g, '\"\\"\"') + '"').join(","));
+  const sep = "\r\n";
+  const bom = "\uFEFF";
+  const csv = bom + [h.join(",")].concat(rows).join(sep);
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const d = new Date().toISOString().split("T")[0];
+  a.href = url; a.download = "journal_central_"+d+".csv";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  // done
+}
+window.sortBy = sortBy;
+window.render = render;
+window.exportCSV = exportCSV;
+</script>
+</body></html>
