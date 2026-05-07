@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Journal Machines — Nice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css"/>
+<style>
+:root{--pr:#1D9E75;--prd:#0F6E56;--bg:#fff;--bg2:#f5f5f3;--bg3:#efefed;--tx:#1a1a18;--tx2:#6b6b65;--tx3:#9b9b95;--bd:rgba(0,0,0,0.12);--bd2:rgba(0,0,0,0.25);--rm:8px;--rl:12px;--sbg:#EAF3DE;--st:#27500A;--wbg:#FAEEDA;--wt:#633806;--dbg:#FCEBEB;--dt:#791F1F;--ibg:#E6F1FB;--it:#0C447C}
+@media(prefers-color-scheme:dark){:root{--bg:#1c1c1a;--bg2:#262624;--bg3:#2e2e2c;--tx:#f0f0ec;--tx2:#a0a09a;--tx3:#68685e;--bd:rgba(255,255,255,0.1);--bd2:rgba(255,255,255,0.22);--sbg:#173404;--st:#C0DD97;--wbg:#412402;--wt:#FAC775;--dbg:#501313;--dt:#F09595;--ibg:#042C53;--it:#85B7EB}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--tx);min-height:100vh}
+.page{max-width:980px;margin:0 auto;padding:2rem 1rem}
+.hdr{display:flex;align-items:center;gap:14px;margin-bottom:2rem}
+.hico{width:48px;height:48px;background:var(--pr);border-radius:var(--rm);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
+.abg{display:inline-flex;align-items:center;gap:6px;background:var(--ibg);color:var(--it);padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600;margin-top:4px}
+.sbg{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600;margin-top:4px;margin-left:8px}
+.sbg.on{background:var(--sbg);color:var(--st)}.sbg.off{background:var(--dbg);color:var(--dt)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+.stat{background:var(--bg);border-radius:var(--rm);padding:1rem;border:0.5px solid var(--bd)}
+.slb{font-size:12px;color:var(--tx2);margin-bottom:4px}.svl{font-size:24px;font-weight:600}
+.tabs{display:flex;border:0.5px solid var(--bd);border-radius:var(--rm);overflow:hidden;margin-bottom:1.5rem;background:var(--bg)}
+.tab{flex:1;padding:11px 8px;font-size:14px;background:transparent;color:var(--tx2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:inherit;transition:background .12s}
+.tab.active{background:var(--bg2);color:var(--tx);font-weight:500}.tab:not(:last-child){border-right:0.5px solid var(--bd)}
+.card{background:var(--bg);border:0.5px solid var(--bd);border-radius:var(--rl);margin-bottom:1.5rem;overflow:hidden}
+.cbody{padding:1.25rem}
+.stit{font-size:14px;font-weight:500;color:var(--tx2);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.fg2{grid-column:1/-1}
+.fgp{display:flex;flex-direction:column;gap:6px}
+label{font-size:13px;color:var(--tx2);font-weight:500}
+input,select{width:100%;padding:8px 12px;border:0.5px solid var(--bd);border-radius:var(--rm);font-size:14px;background:var(--bg);color:var(--tx);font-family:inherit;height:38px}
+input:focus,select:focus{outline:none;border-color:var(--pr)}
+select:disabled{opacity:.75;cursor:not-allowed;background:var(--bg2)}
+.brow{display:flex;gap:10px;justify-content:flex-end;margin-top:1.25rem}
+.btn{padding:9px 18px;border-radius:var(--rm);font-size:14px;cursor:pointer;border:0.5px solid var(--bd2);background:var(--bg);color:var(--tx);font-family:inherit;display:inline-flex;align-items:center;gap:7px;transition:background .12s}
+.btn:hover{background:var(--bg2)}.btn.p{background:var(--pr);color:#fff;border-color:var(--prd)}.btn.p:hover{background:var(--prd)}
+.btn.d{color:var(--dt);border-color:var(--dbg);background:var(--dbg)}.btn.sm{padding:5px 10px;font-size:12px}.btn:disabled{opacity:.5;cursor:not-allowed}
+.tbar{display:flex;gap:8px;align-items:center;padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);flex-wrap:wrap}
+.tbar input,.tbar select{height:34px;font-size:13px}.tbar input{width:190px}.tbar select{width:140px}.tbar-r{margin-left:auto;display:flex;gap:8px}
+table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+th{text-align:left;padding:9px 10px;font-size:12px;font-weight:500;color:var(--tx2);border-bottom:0.5px solid var(--bd);background:var(--bg2)}
+td{padding:9px 10px;border-bottom:0.5px solid var(--bd);vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg2)}
+.badge{font-size:11px;padding:3px 9px;border-radius:100px;display:inline-block;font-weight:500}
+.bs{background:var(--sbg);color:var(--st)}.bw{background:var(--wbg);color:var(--wt)}.bd2{background:var(--dbg);color:var(--dt)}.bi{background:var(--ibg);color:var(--it)}
+.empty{text-align:center;padding:3rem 1rem;color:var(--tx3);font-size:14px}
+.toast{position:fixed;bottom:24px;right:24px;padding:11px 20px;border-radius:var(--rm);font-size:13px;font-weight:500;display:none;z-index:999;color:#fff}
+.mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:center;justify-content:center}
+.mov.open{display:flex}.modal{background:var(--bg);border-radius:var(--rl);padding:1.75rem;width:100%;max-width:540px;border:0.5px solid var(--bd)}
+.modal h3{font-size:16px;font-weight:600;margin-bottom:1.25rem}
+.lov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:200;align-items:center;justify-content:center}
+.lov.open{display:flex}.lbox{background:var(--bg);border-radius:var(--rl);padding:2rem;text-align:center;font-size:14px;color:var(--tx2)}
+.spin{width:32px;height:32px;border:3px solid var(--bd);border-top-color:var(--pr);border-radius:50%;animation:sp .8s linear infinite;margin:0 auto 12px}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}.fg{grid-template-columns:1fr}.fg2{grid-column:1}.tbar-r{margin-left:0;width:100%}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hdr">
+    <div class="hico"><i class="ti ti-clipboard-list"></i></div>
+    <div>
+      <div style="font-size:20px;font-weight:600">Journal Machines — Magasin Central</div>
+      <div style="display:flex;align-items:center;flex-wrap:wrap">
+        <div class="abg"><i class="ti ti-building"></i> Nice</div>
+        <span class="sbg off" id="sb"><i class="ti ti-wifi-off"></i> Connexion...</span>
+      </div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="slb">Total</div><div class="svl" id="st">—</div></div>
+    <div class="stat"><div class="slb">Entrées</div><div class="svl" id="si">—</div></div>
+    <div class="stat"><div class="slb">Sorties</div><div class="svl" id="so">—</div></div>
+    <div class="stat"><div class="slb">Blocage QS</div><div class="svl" id="sq">—</div></div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('entree')" id="t-entree"><i class="ti ti-login"></i> Entrée</button>
+    <button class="tab" onclick="switchTab('sortie')" id="t-sortie"><i class="ti ti-logout"></i> Sortie</button>
+    <button class="tab" onclick="switchTab('journal')" id="t-journal"><i class="ti ti-table"></i> Journal</button>
+  </div>
+  <div id="v-entree">
+    <div class="card"><div class="cbody">
+      <div class="stit"><i class="ti ti-login"></i> Enregistrement d’entrée</div>
+      <div class="fg">
+        <div class="fgp"><label>N° Asset tag *</label><input type="text" id="in-asset" placeholder="ex. AT-00123"/></div>
+        <div class="fgp"><label>Date d’entrée *</label><input type="date" id="in-date"/></div>
+        <div class="fgp"><label>Agence de saisie (verrouillée)</label><select id="in-saisie" disabled><option value="Magasin Central">Magasin Central</option>
+<option value="Strasbourg">Strasbourg</option>
+<option value="Caen">Caen</option>
+<option value="Metz">Metz</option>
+<option value="Bordeaux">Bordeaux</option>
+<option value="Paris Nord">Paris Nord</option>
+<option value="Paris Ouest">Paris Ouest</option>
+<option value="Paris Sud">Paris Sud</option>
+<option value="Dijon">Dijon</option>
+<option value="Lille">Lille</option>
+<option value="Rouen">Rouen</option>
+<option value="Reims">Reims</option>
+<option value="Troyes">Troyes</option>
+<option value="Lyon">Lyon</option>
+<option value="Annecy">Annecy</option>
+<option value="Nice" selected>Nice</option>
+<option value="Montpellier">Montpellier</option>
+<option value="Marseille">Marseille</option>
+<option value="Toulouse">Toulouse</option>
+<option value="Pau">Pau</option>
+<option value="Angers">Angers</option>
+<option value="Vierzon">Vierzon</option>
+<option value="Clermont">Clermont</option>
+<option value="Quimper">Quimper</option></select></div>
+        <div class="fgp"><label>Agence de provenance *</label><input type="text" id="in-agence" placeholder="ex. Agence Nord"/></div>
+        <div class="fgp"><label>Blocage QS</label><select id="in-qs"><option value="">— Sélectionner —</option><option>Oui</option><option>Non</option></select></div>
+        <div class="fgp fg2"><label>Remarque</label><input type="text" id="in-note" placeholder="Optionnel"/></div>
+      </div>
+      <div class="brow">
+        <button class="btn" onclick="clearForm('in')"><i class="ti ti-x"></i> Effacer</button>
+        <button class="btn p" id="btn-in" onclick="saveEntree()"><i class="ti ti-check"></i> Enregistrer l’entrée</button>
+      </div>
+    </div></div>
+  </div>
+  <div id="v-sortie" style="display:none">
+    <div class="card"><div class="cbody">
+      <div class="stit"><i class="ti ti-logout"></i> Enregistrement de sortie</div>
+      <div class="fg">
+        <div class="fgp"><label>N° Asset tag *</label><input type="text" id="out-asset" placeholder="ex. AT-00123"/></div>
+        <div class="fgp"><label>Date de sortie *</label><input type="date" id="out-date"/></div>
+        <div class="fgp"><label>Agence de saisie (verrouillée)</label><select id="out-saisie" disabled><option value="Magasin Central">Magasin Central</option>
+<option value="Strasbourg">Strasbourg</option>
+<option value="Caen">Caen</option>
+<option value="Metz">Metz</option>
+<option value="Bordeaux">Bordeaux</option>
+<option value="Paris Nord">Paris Nord</option>
+<option value="Paris Ouest">Paris Ouest</option>
+<option value="Paris Sud">Paris Sud</option>
+<option value="Dijon">Dijon</option>
+<option value="Lille">Lille</option>
+<option value="Rouen">Rouen</option>
+<option value="Reims">Reims</option>
+<option value="Troyes">Troyes</option>
+<option value="Lyon">Lyon</option>
+<option value="Annecy">Annecy</option>
+<option value="Nice" selected>Nice</option>
+<option value="Montpellier">Montpellier</option>
+<option value="Marseille">Marseille</option>
+<option value="Toulouse">Toulouse</option>
+<option value="Pau">Pau</option>
+<option value="Angers">Angers</option>
+<option value="Vierzon">Vierzon</option>
+<option value="Clermont">Clermont</option>
+<option value="Quimper">Quimper</option></select></div>
+        <div class="fgp"><label>Agence de provenance</label><input type="text" id="out-agence" placeholder="Optionnel"/></div>
+        <div class="fgp"><label>Blocage QS</label><select id="out-qs"><option value="">— Sélectionner —</option><option>Oui</option><option>Non</option></select></div>
+        <div class="fgp"><label>Destination *</label><select id="out-dest"><option value="">— Sélectionner —</option><option>Soverp</option><option>Dinington</option><option>Maintenance</option></select></div>
+        <div class="fgp fg2"><label>Remarque</label><input type="text" id="out-note" placeholder="Optionnel"/></div>
+      </div>
+      <div class="brow">
+        <button class="btn" onclick="clearForm('out')"><i class="ti ti-x"></i> Effacer</button>
+        <button class="btn p" id="btn-out" onclick="saveSortie()"><i class="ti ti-check"></i> Enregistrer la sortie</button>
+      </div>
+    </div></div>
+  </div>
+  <div id="v-journal" style="display:none">
+    <div class="card">
+      <div class="tbar">
+        <input type="text" id="search" placeholder="Rechercher..." oninput="renderTable()"/>
+        <select id="ftype" onchange="renderTable()"><option value="">Tous types</option><option>Entrée</option><option>Sortie</option></select>
+        <div class="tbar-r"><button class="btn sm" onclick="exportCSV()"><i class="ti ti-download"></i> Export CSV</button></div>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr>
+            <th style="width:100px">Asset tag</th><th style="width:70px">Type</th><th style="width:95px">Date</th>
+            <th style="width:110px">Agence saisie</th><th style="width:115px">Provenance</th>
+            <th style="width:75px">Bloc. QS</th><th style="width:100px">Destination</th>
+            <th>Remarque</th><th style="width:80px">Actions</th>
+          </tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mov" id="mov">
+  <div class="modal">
+    <h3 id="mtit">Modifier</h3>
+    <div class="fg">
+      <div class="fgp"><label>N° Asset tag</label><input type="text" id="m-asset"/></div>
+      <div class="fgp"><label>Date</label><input type="date" id="m-date"/></div>
+      <div class="fgp"><label>Agence saisie</label><select id="m-saisie"><option value="Magasin Central">Magasin Central</option>
+<option value="Strasbourg">Strasbourg</option>
+<option value="Caen">Caen</option>
+<option value="Metz">Metz</option>
+<option value="Bordeaux">Bordeaux</option>
+<option value="Paris Nord">Paris Nord</option>
+<option value="Paris Ouest">Paris Ouest</option>
+<option value="Paris Sud">Paris Sud</option>
+<option value="Dijon">Dijon</option>
+<option value="Lille">Lille</option>
+<option value="Rouen">Rouen</option>
+<option value="Reims">Reims</option>
+<option value="Troyes">Troyes</option>
+<option value="Lyon">Lyon</option>
+<option value="Annecy">Annecy</option>
+<option value="Nice">Nice</option>
+<option value="Montpellier">Montpellier</option>
+<option value="Marseille">Marseille</option>
+<option value="Toulouse">Toulouse</option>
+<option value="Pau">Pau</option>
+<option value="Angers">Angers</option>
+<option value="Vierzon">Vierzon</option>
+<option value="Clermont">Clermont</option>
+<option value="Quimper">Quimper</option></select></div>
+      <div class="fgp"><label>Agence provenance</label><input type="text" id="m-agence"/></div>
+      <div class="fgp"><label>Blocage QS</label><select id="m-qs"><option value="">—</option><option>Oui</option><option>Non</option></select></div>
+      <div class="fgp"><label>Destination</label><select id="m-dest"><option value="">—</option><option>Soverp</option><option>Dinington</option><option>Maintenance</option></select></div>
+      <div class="fgp fg2"><label>Remarque</label><input type="text" id="m-note"/></div>
+    </div>
+    <div class="brow" style="margin-top:1.25rem">
+      <button class="btn" onclick="closeModal()"><i class="ti ti-x"></i> Annuler</button>
+      <button class="btn p" onclick="saveEdit()"><i class="ti ti-check"></i> Sauvegarder</button>
+    </div>
+  </div>
+</div>
+<div class="lov" id="lov"><div class="lbox"><div class="spin"></div>Enregistrement...</div></div>
+<div class="toast" id="toast"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDv53luEaoSaX1fTCVCy1OVD7pIqkRlYEQ",
+  authDomain: "journal-machines.firebaseapp.com",
+  projectId: "journal-machines",
+  storageBucket: "journal-machines.firebasestorage.app",
+  messagingSenderId: "1038248860133",
+  appId: "1:1038248860133:web:f3089ef9141e2db3d9370c"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const AGENCE = "Nice";
+const COL = "mouvements";
+const colRef = collection(db, COL);
+const q = query(colRef, orderBy("createdAt","desc"));
+let records = []; let editId = null;
+
+const sb = document.getElementById("sb");
+onSnapshot(q, snap => {
+  records = snap.docs.map(d => ({_id:d.id,...d.data()}));
+  updateStats(); renderTable();
+  sb.className="sbg on"; sb.innerHTML='<i class="ti ti-wifi"></i> Synchronisé';
+}, () => { sb.className="sbg off"; sb.innerHTML='<i class="ti ti-wifi-off"></i> Hors ligne'; });
+
+function today(){ return new Date().toISOString().split("T")[0]; }
+function toast(msg,err){
+  const el=document.getElementById("toast");
+  el.textContent=msg; el.style.background=err?"#A32D2D":"#1D9E75";
+  el.style.display="block"; setTimeout(()=>el.style.display="none",2500);
+}
+function loading(on){ document.getElementById("lov").classList.toggle("open",on); }
+function updateStats(){
+  document.getElementById("st").textContent=records.length;
+  document.getElementById("si").textContent=records.filter(r=>r.type==="Entrée").length;
+  document.getElementById("so").textContent=records.filter(r=>r.type==="Sortie").length;
+  document.getElementById("sq").textContent=records.filter(r=>r.qs==="Oui").length;
+}
+
+// Exposition sur window pour les onclick HTML
+window.switchTab = function(t){
+  ["entree","sortie","journal"].forEach(v=>{
+    document.getElementById("v-"+v).style.display=v===t?"block":"none";
+    document.getElementById("t-"+v).classList.toggle("active",v===t);
+  });
+  if(t==="journal") renderTable();
+};
+
+window.saveEntree = async function(){
+  const asset=document.getElementById("in-asset").value.trim();
+  const date=document.getElementById("in-date").value;
+  const agence=document.getElementById("in-agence").value.trim();
+  if(!asset||!date||!agence){toast("Champs obligatoires manquants",true);return;}
+  const btn=document.getElementById("btn-in"); btn.disabled=true; loading(true);
+  try{
+    await addDoc(colRef,{type:"Entrée",asset,date,saisie:AGENCE,agence,
+      qs:document.getElementById("in-qs").value,dest:"—",
+      note:document.getElementById("in-note").value.trim(),createdAt:serverTimestamp()});
+    clearForm("in"); toast("Entrée enregistrée ✓");
+  }catch(e){toast("Erreur: "+e.message,true);}
+  finally{btn.disabled=false;loading(false);}
+};
+
+window.saveSortie = async function(){
+  const asset=document.getElementById("out-asset").value.trim();
+  const date=document.getElementById("out-date").value;
+  const dest=document.getElementById("out-dest").value;
+  if(!asset||!date||!dest){toast("Champs obligatoires manquants",true);return;}
+  const btn=document.getElementById("btn-out"); btn.disabled=true; loading(true);
+  try{
+    await addDoc(colRef,{type:"Sortie",asset,date,saisie:AGENCE,
+      agence:document.getElementById("out-agence").value.trim()||"—",
+      qs:document.getElementById("out-qs").value,
+      dest,note:document.getElementById("out-note").value.trim(),createdAt:serverTimestamp()});
+    clearForm("out"); toast("Sortie enregistrée ✓");
+  }catch(e){toast("Erreur: "+e.message,true);}
+  finally{btn.disabled=false;loading(false);}
+};
+
+window.clearForm = function(p){
+  ["asset","agence","note"].forEach(f=>{const el=document.getElementById(p+"-"+f);if(el)el.value="";});
+  document.getElementById(p+"-qs").value="";
+  if(p==="out") document.getElementById("out-dest").value="";
+  document.getElementById(p+"-date").value=today();
+};
+
+function getFiltered(){
+  const q2=(document.getElementById("search").value||"").toLowerCase();
+  const ft=document.getElementById("ftype").value||"";
+  return records.filter(r=>{
+    const mq=!q2||Object.values(r).some(v=>String(v).toLowerCase().includes(q2));
+    return mq&&(!ft||r.type===ft);
+  });
+}
+
+function renderTable(){
+  const f=getFiltered();
+  const tb=document.getElementById("tbody");
+  if(!f.length){tb.innerHTML='<tr><td colspan="9"><div class="empty"><i class="ti ti-inbox" style="font-size:28px;display:block;margin-bottom:8px"></i>Aucun enregistrement</div></td></tr>';return;}
+  tb.innerHTML=f.map(r=>`<tr>
+    <td style="font-weight:500">${r.asset}</td>
+    <td><span class="badge ${r.type==="Entrée"?"bs":"bw"}">${r.type}</span></td>
+    <td>${r.date}</td>
+    <td><span class="badge bi">${r.saisie||"—"}</span></td>
+    <td>${r.agence||"—"}</td>
+    <td>${r.qs?`<span class="badge ${r.qs==="Oui"?"bd2":""}">${r.qs}</span>`:"—"}</td>
+    <td>${r.dest&&r.dest!=="—"?`<span class="badge bi">${r.dest}</span>`:"—"}</td>
+    <td style="color:var(--tx2)">${r.note||"—"}</td>
+    <td style="white-space:nowrap">
+      <button class="btn sm" onclick="openEdit('"+r._id+"')" title="Modifier"><i class="ti ti-edit"></i></button>
+      <button class="btn sm d" onclick="deleteRec('"+r._id+"')" title="Supprimer" style="margin-left:4px"><i class="ti ti-trash"></i></button>
+    </td>
+  </tr>`).join("");
+}
+
+window.openEdit = function(id){
+  editId=id; const r=records.find(x=>x._id===id); if(!r)return;
+  document.getElementById("m-asset").value=r.asset||"";
+  document.getElementById("m-date").value=r.date||"";
+  document.getElementById("m-saisie").value=r.saisie||AGENCE;
+  document.getElementById("m-agence").value=r.agence==="—"?"":r.agence||"";
+  document.getElementById("m-qs").value=r.qs||"";
+  document.getElementById("m-dest").value=r.dest==="—"?"":r.dest||"";
+  document.getElementById("m-note").value=r.note||"";
+  document.getElementById("mtit").textContent="Modifier — "+r.asset+" ("+r.type+")";
+  document.getElementById("mov").classList.add("open");
+};
+
+window.closeModal = function(){document.getElementById("mov").classList.remove("open");editId=null;};
+
+window.saveEdit = async function(){
+  if(!editId)return; loading(true);
+  try{
+    await updateDoc(doc(db,COL,editId),{
+      asset:document.getElementById("m-asset").value.trim(),
+      date:document.getElementById("m-date").value,
+      saisie:document.getElementById("m-saisie").value,
+      agence:document.getElementById("m-agence").value.trim()||"—",
+      qs:document.getElementById("m-qs").value,
+      dest:document.getElementById("m-dest").value||"—",
+      note:document.getElementById("m-note").value.trim()
+    });
+    closeModal(); toast("Modifié ✓");
+  }catch(e){toast("Erreur: "+e.message,true);}
+  finally{loading(false);}
+};
+
+window.deleteRec = async function(id){
+  const r=records.find(x=>x._id===id);
+  if(!confirm("Supprimer "+r.asset+" ("+r.type+" — "+r.date+") ?"))return;
+  loading(true);
+  try{await deleteDoc(doc(db,COL,id));toast("Supprimé");}
+  catch(e){toast("Erreur: "+e.message,true);}
+  finally{loading(false);}
+};
+
+window.exportCSV = function(){
+  const f=getFiltered();
+  if(!f.length){toast("Aucune donnée",true);return;}
+  const h=["Asset tag","Type","Date","Agence saisie","Agence provenance","Blocage QS","Destination","Remarque"];
+  const rows=f.map(r=>[r.asset,r.type,r.date,r.saisie||"",r.agence,r.qs||"",r.dest,r.note]
+    .map(v=>'"'+String(v||"").replace(/"/g,'""')+'"').join(","));
+  const csv="\uFEFF"+[h.join(","),...rows].join("\r\n");
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url; a.download="journal_nice_"+today()+".csv";
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  toast("Export CSV ✓");
+};
+
+window.renderTable = renderTable;
+
+document.getElementById("mov").addEventListener("click",function(e){if(e.target===this)closeModal();});
+document.getElementById("in-date").value=today();
+document.getElementById("out-date").value=today();
+
+</script>
+</body>
+</html>
