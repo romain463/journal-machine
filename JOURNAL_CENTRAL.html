@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Journal Central — Toutes Agences</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css"/>
+<style>
+:root{
+  --primary:#1D9E75;--primary-dark:#0F6E56;
+  --bg:#ffffff;--bg-secondary:#f5f5f3;--bg-tertiary:#efefed;
+  --text:#1a1a18;--text-secondary:#6b6b65;--text-tertiary:#9b9b95;
+  --border:rgba(0,0,0,0.12);--border-hover:rgba(0,0,0,0.25);
+  --radius-md:8px;--radius-lg:12px;
+  --success-bg:#EAF3DE;--success-text:#27500A;
+  --warning-bg:#FAEEDA;--warning-text:#633806;
+  --danger-bg:#FCEBEB;--danger-text:#791F1F;
+  --info-bg:#E6F1FB;--info-text:#0C447C;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg-secondary:#262624;--bg-tertiary:#2e2e2c;
+    --text:#f0f0ec;--text-secondary:#a0a09a;--text-tertiary:#68685e;
+    --border:rgba(255,255,255,0.1);--border-hover:rgba(255,255,255,0.22);
+    --success-bg:#173404;--success-text:#C0DD97;
+    --warning-bg:#412402;--warning-text:#FAC775;
+    --danger-bg:#501313;--danger-text:#F09595;
+    --info-bg:#042C53;--info-text:#85B7EB;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-tertiary);color:var(--text);min-height:100vh}
+.page{max-width:1100px;margin:0 auto;padding:2rem 1rem}
+.header{display:flex;align-items:center;gap:14px;margin-bottom:2rem}
+.header-icon{width:48px;height:48px;background:#534AB7;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
+.header h1{font-size:20px;font-weight:600}
+.header p{font-size:13px;color:var(--text-secondary);margin-top:2px}
+.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:1.5rem}
+.stat-card{background:var(--bg);border-radius:var(--radius-md);padding:1rem;border:0.5px solid var(--border)}
+.stat-label{font-size:12px;color:var(--text-secondary);margin-bottom:4px}
+.stat-val{font-size:22px;font-weight:600}
+.import-zone{background:var(--bg);border:1.5px dashed var(--border-hover);border-radius:var(--radius-lg);padding:2rem;text-align:center;margin-bottom:1.5rem;transition:border-color 0.2s;cursor:pointer}
+.import-zone:hover{border-color:var(--primary)}
+.import-zone i{font-size:32px;color:var(--text-tertiary);display:block;margin-bottom:10px}
+.import-zone p{font-size:14px;color:var(--text-secondary)}
+.import-zone small{font-size:12px;color:var(--text-tertiary)}
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);margin-bottom:1.5rem;overflow:hidden}
+.toolbar{display:flex;gap:8px;align-items:center;padding:1rem 1.25rem;border-bottom:0.5px solid var(--border);flex-wrap:wrap}
+.toolbar input,.toolbar select{height:34px;font-size:13px}
+.toolbar input{width:180px}
+.toolbar select{width:150px}
+.toolbar-right{margin-left:auto;display:flex;gap:8px}
+.btn{padding:8px 16px;border-radius:var(--radius-md);font-size:13px;cursor:pointer;border:0.5px solid var(--border-hover);background:var(--bg);color:var(--text);font-family:inherit;display:inline-flex;align-items:center;gap:7px;transition:background 0.12s}
+.btn:hover{background:var(--bg-secondary)}
+.btn.primary{background:var(--primary);color:#fff;border-color:var(--primary-dark)}
+.btn.primary:hover{background:var(--primary-dark)}
+.btn.purple{background:#534AB7;color:#fff;border-color:#3C3489}
+.btn.purple:hover{background:#3C3489}
+.btn.danger-outline{color:var(--danger-text);border-color:var(--danger-bg);background:var(--danger-bg)}
+.btn.sm{padding:5px 10px;font-size:12px}
+table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+th{text-align:left;padding:9px 10px;font-size:12px;font-weight:500;color:var(--text-secondary);border-bottom:0.5px solid var(--border);background:var(--bg-secondary);cursor:pointer;user-select:none}
+th:hover{color:var(--text)}
+td{padding:9px 10px;border-bottom:0.5px solid var(--border);vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg-secondary)}
+.badge{font-size:11px;padding:3px 9px;border-radius:100px;display:inline-block;font-weight:500}
+.badge.success{background:var(--success-bg);color:var(--success-text)}
+.badge.warning{background:var(--warning-bg);color:var(--warning-text)}
+.badge.danger{background:var(--danger-bg);color:var(--danger-text)}
+.badge.info{background:var(--info-bg);color:var(--info-text)}
+.badge.purple{background:#EEEDFE;color:#3C3489}
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--text-tertiary);font-size:14px}
+.empty-state i{font-size:40px;display:block;margin-bottom:12px}
+.toast{position:fixed;bottom:24px;right:24px;padding:11px 20px;border-radius:var(--radius-md);font-size:13px;font-weight:500;display:none;z-index:999;color:#fff}
+.section-title{font-size:14px;font-weight:500;color:var(--text-secondary);display:flex;align-items:center;gap:8px;padding:1rem 1.25rem;border-bottom:0.5px solid var(--border)}
+.agences-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:1.25rem}
+.agence-chip{background:var(--bg-secondary);border:0.5px solid var(--border);border-radius:var(--radius-md);padding:8px 12px;font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.agence-chip .count{background:var(--info-bg);color:var(--info-text);font-size:11px;font-weight:600;padding:2px 7px;border-radius:100px}
+input[type=file]{display:none}
+@media(max-width:700px){.stats-row{grid-template-columns:repeat(2,1fr)}.toolbar-right{margin-left:0;width:100%}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="header-icon"><i class="ti ti-building-skyscraper"></i></div>
+    <div>
+      <h1>Journal Central — Vue consolidée</h1>
+      <p>Importez les exports CSV de chaque agence pour une vision globale</p>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">Total enregistrements</div><div class="stat-val" id="s-total">0</div></div>
+    <div class="stat-card"><div class="stat-label">Entrées</div><div class="stat-val" id="s-in">0</div></div>
+    <div class="stat-card"><div class="stat-label">Sorties</div><div class="stat-val" id="s-out">0</div></div>
+    <div class="stat-card"><div class="stat-label">Blocage QS</div><div class="stat-val" id="s-qs">0</div></div>
+    <div class="stat-card"><div class="stat-label">Agences chargées</div><div class="stat-val" id="s-agences">0</div></div>
+  </div>
+
+  <label for="csv-input">
+    <div class="import-zone" id="drop-zone">
+      <i class="ti ti-upload"></i>
+      <p>Cliquez ou glissez-déposez les fichiers CSV des agences</p>
+      <small>Vous pouvez importer plusieurs fichiers à la fois</small>
+    </div>
+  </label>
+  <input type="file" id="csv-input" accept=".csv" multiple onchange="handleFiles(this.files)"/>
+
+  <div class="card" id="agences-card" style="display:none">
+    <div class="section-title"><i class="ti ti-map-pin"></i> Agences chargées</div>
+    <div class="agences-grid" id="agences-grid"></div>
+  </div>
+
+  <div class="card" id="table-card">
+    <div class="toolbar">
+      <input type="text" id="search" placeholder="Rechercher..." oninput="renderTable()"/>
+      <select id="filter-type" onchange="renderTable()">
+        <option value="">Tous types</option><option>Entrée</option><option>Sortie</option>
+      </select>
+      <select id="filter-agence" onchange="renderTable()">
+        <option value="">Toutes agences</option>
+      </select>
+      <select id="filter-dest" onchange="renderTable()">
+        <option value="">Toutes destinations</option>
+        <option>Soverp</option><option>Dinington</option><option>Maintenance</option>
+      </select>
+      <div class="toolbar-right">
+        <button class="btn sm" onclick="exportAll()"><i class="ti ti-download"></i> Export global CSV</button>
+        <button class="btn sm danger-outline" onclick="clearAll()"><i class="ti ti-trash"></i> Tout effacer</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr>
+          <th style="width:105px" onclick="sortBy('asset')">Asset tag <i class="ti ti-arrows-sort" style="font-size:11px"></i></th>
+          <th style="width:70px" onclick="sortBy('type')">Type</th>
+          <th style="width:95px" onclick="sortBy('date')">Date <i class="ti ti-arrows-sort" style="font-size:11px"></i></th>
+          <th style="width:115px" onclick="sortBy('saisie')">Agence saisie <i class="ti ti-arrows-sort" style="font-size:11px"></i></th>
+          <th style="width:115px">Provenance</th>
+          <th style="width:78px">Bloc. QS</th>
+          <th style="width:105px" onclick="sortBy('dest')">Destination</th>
+          <th>Remarque</th>
+        </tr></thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let allRecords = [];
+let sortCol = 'date';
+let sortAsc = false;
+
+const dropZone = document.getElementById('drop-zone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.borderColor = 'var(--primary)'; });
+dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = ''; });
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.style.borderColor = ''; handleFiles(e.dataTransfer.files); });
+
+function toast(msg, err) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.background = err ? '#A32D2D' : '#1D9E75';
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 3000);
+}
+
+function handleFiles(files) {
+  let count = 0;
+  Array.from(files).forEach(file => {
+    if (!file.name.endsWith('.csv')) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const rows = parseCSV(e.target.result);
+      let added = 0;
+      rows.forEach(r => {
+        if (!r.asset || !r.date) return;
+        const exists = allRecords.some(x => x.asset === r.asset && x.date === r.date && x.type === r.type && x.saisie === r.saisie);
+        if (!exists) { allRecords.push(r); added++; }
+      });
+      count++;
+      if (added > 0) toast(`${file.name} : ${added} ligne(s) importée(s)`);
+      if (count === files.length) { updateAll(); }
+    };
+    reader.readAsText(file, 'UTF-8');
+  });
+}
+
+function parseCSV(text) {
+  text = text.replace(/^\uFEFF/, '');
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) return [];
+  const records = [];
+  for (let i = 1; i < lines.length; i++) {
+    const cols = splitCSVLine(lines[i]);
+    if (cols.length < 7) continue;
+    records.push({
+      asset: cols[0]||'', type: cols[1]||'', date: cols[2]||'',
+      saisie: cols[3]||'', agence: cols[4]||'',
+      qs: cols[5]||'', dest: cols[6]||'—', note: cols[7]||''
+    });
+  }
+  return records;
+}
+
+function splitCSVLine(line) {
+  const result = []; let cur = ''; let inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    if (line[i] === '"') { inQ = !inQ; }
+    else if (line[i] === ',' && !inQ) { result.push(cur.trim()); cur = ''; }
+    else { cur += line[i]; }
+  }
+  result.push(cur.trim());
+  return result;
+}
+
+function updateAll() {
+  updateStats();
+  updateAgencesGrid();
+  updateAgenceFilter();
+  renderTable();
+}
+
+function updateStats() {
+  document.getElementById('s-total').textContent = allRecords.length;
+  document.getElementById('s-in').textContent = allRecords.filter(r => r.type === 'Entrée').length;
+  document.getElementById('s-out').textContent = allRecords.filter(r => r.type === 'Sortie').length;
+  document.getElementById('s-qs').textContent = allRecords.filter(r => r.qs === 'Oui').length;
+  const agences = [...new Set(allRecords.map(r => r.saisie).filter(Boolean))];
+  document.getElementById('s-agences').textContent = agences.length;
+}
+
+function updateAgencesGrid() {
+  const agences = [...new Set(allRecords.map(r => r.saisie).filter(Boolean))].sort();
+  const grid = document.getElementById('agences-grid');
+  document.getElementById('agences-card').style.display = agences.length ? 'block' : 'none';
+  grid.innerHTML = agences.map(a => {
+    const count = allRecords.filter(r => r.saisie === a).length;
+    return `<div class="agence-chip"><span>${a}</span><span class="count">${count}</span></div>`;
+  }).join('');
+}
+
+function updateAgenceFilter() {
+  const sel = document.getElementById('filter-agence');
+  const cur = sel.value;
+  const agences = [...new Set(allRecords.map(r => r.saisie).filter(Boolean))].sort();
+  sel.innerHTML = '<option value="">Toutes agences</option>' + agences.map(a => `<option value="${a}"${a===cur?' selected':''}>${a}</option>`).join('');
+}
+
+function sortBy(col) {
+  if (sortCol === col) sortAsc = !sortAsc;
+  else { sortCol = col; sortAsc = true; }
+  renderTable();
+}
+
+function getFiltered() {
+  const q = (document.getElementById('search').value || '').toLowerCase();
+  const ft = document.getElementById('filter-type').value;
+  const fa = document.getElementById('filter-agence').value;
+  const fd = document.getElementById('filter-dest').value;
+  return allRecords.filter(r => {
+    const mq = !q || Object.values(r).some(v => String(v).toLowerCase().includes(q));
+    const mt = !ft || r.type === ft;
+    const ma = !fa || r.saisie === fa;
+    const md = !fd || r.dest === fd;
+    return mq && mt && ma && md;
+  });
+}
+
+function renderTable() {
+  let filtered = getFiltered();
+  filtered.sort((a, b) => {
+    const va = a[sortCol] || ''; const vb = b[sortCol] || '';
+    return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+  });
+  const tbody = document.getElementById('table-body');
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><i class="ti ti-file-import"></i>${allRecords.length ? 'Aucun résultat pour ces filtres' : 'Importez les CSV des agences pour commencer'}</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filtered.map(r => `<tr>
+    <td style="font-weight:500">${r.asset}</td>
+    <td><span class="badge ${r.type==='Entrée'?'success':'warning'}">${r.type}</span></td>
+    <td>${r.date}</td>
+    <td><span class="badge info">${r.saisie||'—'}</span></td>
+    <td>${r.agence||'—'}</td>
+    <td>${r.qs?`<span class="badge ${r.qs==='Oui'?'danger':''}">${r.qs}</span>`:'—'}</td>
+    <td>${r.dest&&r.dest!=='—'?`<span class="badge purple">${r.dest}</span>`:'—'}</td>
+    <td style="color:var(--text-secondary)">${r.note||'—'}</td>
+  </tr>`).join('');
+}
+
+function exportAll() {
+  const filtered = getFiltered();
+  if (!filtered.length) { toast('Aucune donnée à exporter', true); return; }
+  const header = ['Asset tag','Type','Date','Agence saisie','Agence provenance','Blocage QS','Destination','Remarque'];
+  const rows = filtered.map(r => [r.asset,r.type,r.date,r.saisie||'',r.agence,r.qs||'',r.dest,r.note].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(','));
+  const csv = '\uFEFF' + [header.join(','), ...rows].join('\r\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const d = new Date().toISOString().split('T')[0];
+  a.href = url; a.download = `journal_central_${d}.csv`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast(`Export global téléchargé (${filtered.length} lignes)`);
+}
+
+function clearAll() {
+  if (!allRecords.length) { toast('Aucune donnée chargée', true); return; }
+  if (!confirm(`Effacer les ${allRecords.length} enregistrements chargés en mémoire ?`)) return;
+  allRecords = [];
+  updateAll();
+  toast('Données effacées');
+}
+
+renderTable();
+</script>
+</body>
+</html>
