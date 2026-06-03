@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Journal Quimper</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>:root{--pr:#1D9E75;--prd:#0F6E56;--bg:#fff;--bg2:#f5f5f3;--bg3:#efefed;--tx:#1a1a18;--tx2:#6b6b65;--tx3:#9b9b95;--bd:rgba(0,0,0,0.12);--bd2:rgba(0,0,0,0.25);--rm:8px;--rl:12px;--gs:#EAF3DE;--gt:#27500A;--ws:#FAEEDA;--wt:#633806;--ds:#FCEBEB;--dt:#791F1F;--is:#E6F1FB;--it:#0C447C;--ps:#EEEDFE;--pt:#3C3489}
+@media(prefers-color-scheme:dark){:root{--bg:#1c1c1a;--bg2:#262624;--bg3:#2e2e2c;--tx:#f0f0ec;--tx2:#a0a09a;--tx3:#68685e;--bd:rgba(255,255,255,0.1);--bd2:rgba(255,255,255,0.22);--gs:#173404;--gt:#C0DD97;--ws:#412402;--wt:#FAC775;--ds:#501313;--dt:#F09595;--is:#042C53;--it:#85B7EB;--ps:#26215C;--pt:#AFA9EC}}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--tx);min-height:100vh}
+.pg{max-width:1080px;margin:0 auto;padding:2rem 1rem}
+.hd{display:flex;align-items:center;gap:14px;margin-bottom:2rem}
+.hi{width:48px;height:48px;background:var(--pr);border-radius:var(--rm);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
+.ab{display:inline-flex;align-items:center;gap:6px;background:var(--is);color:var(--it);padding:4px 12px;border-radius:100px;font-size:12px;font-weight:500;margin-top:4px}
+.sb{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:500;margin-top:4px;margin-left:8px}
+.sb.on{background:var(--gs);color:var(--gt)}.sb.off{background:var(--ds);color:var(--dt)}
+.st{display:grid;gap:10px;margin-bottom:1.5rem}
+.sc{background:var(--bg);border-radius:var(--rm);padding:1rem;border:0.5px solid var(--bd)}
+.sl{font-size:12px;color:var(--tx2);margin-bottom:4px}.sv{font-size:22px;font-weight:500}
+.tb{display:flex;border:0.5px solid var(--bd);border-radius:var(--rm);overflow:hidden;margin-bottom:1.5rem;background:var(--bg);flex-wrap:wrap}
+.tab{flex:1;min-width:85px;padding:10px 6px;font-size:12px;background:transparent;color:var(--tx2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;font-family:inherit;transition:background .12s}
+.tab.active{background:var(--bg2);color:var(--tx);font-weight:500}.tab:not(:last-child){border-right:0.5px solid var(--bd)}
+.cd{background:var(--bg);border:0.5px solid var(--bd);border-radius:var(--rl);margin-bottom:1.5rem;overflow:hidden}
+.cb{padding:1.25rem}.ct{font-size:14px;font-weight:500;color:var(--tx2);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.f2{grid-column:1/-1}.fp{display:flex;flex-direction:column;gap:6px}
+label{font-size:13px;color:var(--tx2);font-weight:500}
+input,select{width:100%;padding:8px 12px;border:0.5px solid var(--bd);border-radius:var(--rm);font-size:14px;background:var(--bg);color:var(--tx);font-family:inherit;height:38px}
+input:focus,select:focus{outline:none;border-color:var(--pr)}select:disabled{opacity:.75;cursor:not-allowed;background:var(--bg2)}
+.br{display:flex;gap:10px;justify-content:flex-end;margin-top:1.25rem}
+.bn{padding:9px 18px;border-radius:var(--rm);font-size:14px;cursor:pointer;border:0.5px solid var(--bd2);background:var(--bg);color:var(--tx);font-family:inherit;display:inline-flex;align-items:center;gap:7px;transition:background .12s}
+.bn:hover{background:var(--bg2)}.bn.p{background:var(--pr);color:#fff;border-color:var(--prd)}.bn.p:hover{background:var(--prd)}
+.bn.d{color:var(--dt);border-color:var(--ds);background:var(--ds)}.bn.sm{padding:5px 10px;font-size:12px}.bn.o{background:var(--ws);color:var(--wt);border-color:var(--wt)}.bn:disabled{opacity:.5;cursor:not-allowed}
+.tr{display:flex;gap:8px;align-items:center;padding:1rem 1.25rem;border-bottom:0.5px solid var(--bd);flex-wrap:wrap}
+.tr input,.tr select{height:34px;font-size:13px}.tr input{width:190px}.tr select{width:140px}.tr-r{margin-left:auto;display:flex;gap:8px}
+table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+th{text-align:left;padding:9px 10px;font-size:12px;font-weight:500;color:var(--tx2);border-bottom:0.5px solid var(--bd);background:var(--bg2)}
+td{padding:8px 10px;border-bottom:0.5px solid var(--bd);vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg2)}
+.bg{font-size:11px;padding:3px 9px;border-radius:100px;display:inline-block;font-weight:500}
+.bg-s{background:var(--gs);color:var(--gt)}.bg-w{background:var(--ws);color:var(--wt)}.bg-d{background:var(--ds);color:var(--dt)}.bg-i{background:var(--is);color:var(--it)}.bg-p{background:var(--ps);color:var(--pt)}
+.em{text-align:center;padding:3rem 1rem;color:var(--tx3);font-size:14px}
+.toast{position:fixed;bottom:24px;right:24px;padding:11px 20px;border-radius:var(--rm);font-size:13px;font-weight:500;display:none;z-index:999;color:#fff}
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:center;justify-content:center}
+.mo.open{display:flex}.md{background:var(--bg);border-radius:var(--rl);padding:1.75rem;width:100%;max-width:600px;border:0.5px solid var(--bd);max-height:90vh;overflow-y:auto}
+.md h3{font-size:16px;font-weight:500;margin-bottom:1.25rem}
+.lo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:200;align-items:center;justify-content:center}
+.lo.open{display:flex}.lb{background:var(--bg);border-radius:var(--rl);padding:2rem;text-align:center;font-size:14px;color:var(--tx2)}
+.sp{width:32px;height:32px;border:3px solid var(--bd);border-top-color:var(--pr);border-radius:50%;animation:rr .8s linear infinite;margin:0 auto 12px}
+@keyframes rr{to{transform:rotate(360deg)}}
+.dz{border:2px dashed var(--bd2);border-radius:var(--rl);padding:2rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
+.dz:hover,.dz.over{border-color:var(--pr);background:var(--gs)}
+.dz i{font-size:32px;color:var(--tx3);display:block;margin-bottom:10px}
+.dz p{font-size:14px;color:var(--tx2)}.dz small{font-size:12px;color:var(--tx3)}
+.sec-hd{font-size:13px;font-weight:500;padding:12px 1.25rem;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:8px}
+.din-pending{background:var(--ws);color:var(--wt)}.din-done{background:var(--gs);color:var(--gt)}
+.mc-pending{background:var(--ps);color:var(--pt)}.mc-done{background:var(--gs);color:var(--gt)}
+.wo-field{display:none}
+@media(max-width:600px){.st{grid-template-columns:repeat(2,1fr)}.fg{grid-template-columns:1fr}.f2{grid-column:1}.tr-r{margin-left:0;width:100%}}</style>
+</head><body>
+<div class="pg">
+  <div class="hd"><div class="hi"><i class="ti ti-clipboard-list"></i></div>
+    <div><div style="font-size:20px;font-weight:500">Journal Machines — Quimper</div>
+      <div style="display:flex;align-items:center;flex-wrap:wrap">
+        <div class="ab"><i class="ti ti-building" aria-hidden="true"></i> Quimper</div>
+        <span class="sb off" id="sb"><i class="ti ti-wifi-off"></i> Connexion...</span>
+      </div></div></div>
+  <div class="st" style="grid-template-columns:repeat(5,1fr)">
+    <div class="sc"><div class="sl">Total</div><div class="sv" id="st">—</div></div>
+    <div class="sc"><div class="sl">Entrées</div><div class="sv" id="si">—</div></div>
+    <div class="sc"><div class="sl">Sorties</div><div class="sv" id="so">—</div></div>
+    <div class="sc"><div class="sl">Blocage QS</div><div class="sv" id="sq">—</div></div>
+    <div class="sc" style="border-left:2px solid var(--pr)"><div class="sl">Disponibles</div><div class="sv" style="color:var(--pr)" id="sd">—</div></div>
+  </div>
+  <div class="tb">
+    <button class="tab active" onclick="switchTab('entree')" id="tentree"><i class="ti ti-login"></i> Entrée</button>
+    <button class="tab" onclick="switchTab('sortie')" id="tsortie"><i class="ti ti-logout"></i> Sortie</button>
+    <button class="tab" onclick="switchTab('journal')" id="tjournal"><i class="ti ti-table"></i> Journal</button>
+    <button class="tab" onclick="switchTab('dispo')" id="tdispo"><i class="ti ti-device-desktop-check"></i> Disponibles</button>
+    <button class="tab" onclick="switchTab('magasincentral')" id="tmagasincentral"><i class="ti ti-building"></i> Magasin Central</button>
+
+  </div>
+  <div id="ventree"><div class="cd"><div class="cb">
+    <div class="ct"><i class="ti ti-login" aria-hidden="true"></i> Enregistrement d&rsquo;entrée</div>
+    <div class="fg">
+      <div class="fp"><label>N&deg; Asset tag *</label><input type="text" id="ia" placeholder="ex. AT-00123"/></div>
+      <div class="fp"><label>Date d&rsquo;entrée *</label><input type="date" id="id"/></div>
+      <div class="fp"><label>N&deg; Série constructeur</label><input type="text" id="inser" placeholder="ex. SN-XYZ-456"/></div>
+      <div class="fp"><label>Modéle</label><input type="text" id="imod" placeholder="ex. BEARING UNIT 6205"/></div>
+      <div class="fp"><label>Agence de saisie (verrouillée)</label><select id="isa" disabled><option value="Magasin Central">Magasin Central</option><option value="Strasbourg">Strasbourg</option><option value="Caen">Caen</option><option value="Metz">Metz</option><option value="Bordeaux">Bordeaux</option><option value="Paris Nord">Paris Nord</option><option value="Paris Ouest">Paris Ouest</option><option value="Paris Sud">Paris Sud</option><option value="Dijon">Dijon</option><option value="Lille">Lille</option><option value="Rouen">Rouen</option><option value="Reims">Reims</option><option value="Troyes">Troyes</option><option value="Lyon">Lyon</option><option value="Annecy">Annecy</option><option value="Nice">Nice</option><option value="Montpellier">Montpellier</option><option value="Marseille">Marseille</option><option value="Toulouse">Toulouse</option><option value="Pau">Pau</option><option value="Angers">Angers</option><option value="Vierzon">Vierzon</option><option value="Clermont">Clermont</option><option value="Quimper" selected>Quimper</option></select></div>
+      <div class="fp"><label>Agence de provenance *</label><input type="text" id="iag" placeholder="ex. Agence Nord"/></div>
+      <div class="fp"><label>Blocage QS</label><select id="iqs"><option value="">— Sélectionner —</option><option>Oui</option><option>Non</option></select></div>
+      <div class="fp f2"><label>Remarque</label><input type="text" id="in" placeholder="Optionnel"/></div>
+    </div>
+    <div class="br">
+      <button class="bn" onclick="clearForm('i')"><i class="ti ti-x"></i> Effacer</button>
+      <button class="bn p" id="bin" onclick="saveEntree()"><i class="ti ti-check"></i> Enregistrer l&rsquo;entrée</button>
+    </div>
+    <div style="margin-top:1.5rem;border-top:0.5px solid var(--bd);padding-top:1.25rem">
+      <div class="ct"><i class="ti ti-file-spreadsheet" aria-hidden="true"></i> Import Excel en masse</div>
+      <div class="dz" id="dropzone" role="button" tabindex="0">
+        <i class="ti ti-upload" aria-hidden="true"></i>
+        <p>Glissez un fichier Excel ou cliquez pour sélectionner</p>
+        <small>Colonnes : Asset tag, Date, N&deg; Série, Modéle, Agence provenance, Blocage QS, Remarque</small>
+      </div>
+      <input type="file" id="file-input" accept=".xlsx,.xls" style="display:none"/>
+    </div>
+  </div></div></div>
+  <div id="vsortie" style="display:none"><div class="cd"><div class="cb">
+    <div class="ct"><i class="ti ti-logout" aria-hidden="true"></i> Enregistrement de sortie</div>
+    <div class="fg">
+      <div class="fp"><label>N&deg; Asset tag *</label><input type="text" id="oa" placeholder="ex. AT-00123"/></div>
+      <div class="fp"><label>Date de sortie *</label><input type="date" id="od"/></div>
+      <div class="fp"><label>N&deg; Série constructeur</label><input type="text" id="onser" placeholder="Optionnel"/></div>
+      <div class="fp"><label>Modéle</label><input type="text" id="omod" placeholder="Optionnel"/></div>
+      <div class="fp"><label>Agence de saisie (verrouillée)</label><select id="osa" disabled><option value="Magasin Central">Magasin Central</option><option value="Strasbourg">Strasbourg</option><option value="Caen">Caen</option><option value="Metz">Metz</option><option value="Bordeaux">Bordeaux</option><option value="Paris Nord">Paris Nord</option><option value="Paris Ouest">Paris Ouest</option><option value="Paris Sud">Paris Sud</option><option value="Dijon">Dijon</option><option value="Lille">Lille</option><option value="Rouen">Rouen</option><option value="Reims">Reims</option><option value="Troyes">Troyes</option><option value="Lyon">Lyon</option><option value="Annecy">Annecy</option><option value="Nice">Nice</option><option value="Montpellier">Montpellier</option><option value="Marseille">Marseille</option><option value="Toulouse">Toulouse</option><option value="Pau">Pau</option><option value="Angers">Angers</option><option value="Vierzon">Vierzon</option><option value="Clermont">Clermont</option><option value="Quimper" selected>Quimper</option></select></div>
+      <div class="fp"><label>Agence de provenance</label><input type="text" id="oag" placeholder="Optionnel"/></div>
+      <div class="fp"><label>Blocage QS</label><select id="oqs"><option value="">— Sélectionner —</option><option>Oui</option><option>Non</option></select></div>
+      <div class="fp"><label>Destination *</label><select id="odst" onchange="onDestChange()"><option value="">— Sélectionner —</option><option value="Soverp">Soverp</option><option value="Dinington">Dinington</option><option value="Maintenance">Maintenance</option><option value="Clients">Clients</option><option value="Magasin Central">Magasin Central</option></select></div>
+      <div class="fp f2 wo-field" id="wo-field"><label>N&deg; WO (Work Order)</label><input type="text" id="owo" placeholder="ex. WO-2024-001"/></div>
+      <div class="fp f2"><label>Remarque</label><input type="text" id="on" placeholder="Optionnel"/></div>
+    </div>
+    <div class="br">
+      <button class="bn" onclick="clearForm('o')"><i class="ti ti-x"></i> Effacer</button>
+      <button class="bn p" id="bout" onclick="saveSortie()"><i class="ti ti-check"></i> Enregistrer la sortie</button>
+    </div>
+  </div></div></div>
+  <div id="vjournal" style="display:none"><div class="cd">
+    <div class="tr">
+      <input type="text" id="fs" placeholder="Rechercher..." oninput="render()"/>
+      <select id="ft" onchange="render()"><option value="">Tous types</option><option>Entrée</option><option>Sortie</option></select>
+      <div class="tr-r"><button class="bn sm" onclick="exportCSV()"><i class="ti ti-download"></i> Export CSV</button></div>
+    </div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr>
+        <th style="width:100px">Asset tag</th><th style="width:68px">Type</th><th style="width:90px">Date</th>
+        <th style="width:115px">N— Série</th><th style="width:110px">Modéle</th>
+        <th style="width:115px">Provenance</th><th style="width:72px">Bloc.QS</th>
+        <th style="width:95px">Destination</th><th style="width:90px">N— WO</th>
+        <th>Remarque</th><th style="width:105px">Actions</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table></div>
+  </div></div>
+  <div id="vdispo" style="display:none"><div class="cd">
+    <div class="sec-hd" style="background:var(--gs);color:var(--gt)"><i class="ti ti-device-desktop-check" aria-hidden="true"></i> Machines disponibles</div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr>
+        <th style="width:120px">Asset tag</th><th style="width:130px">N— Série</th>
+        <th style="width:130px">Modéle</th><th style="width:95px">Date entrée</th>
+        <th style="width:140px">Agence provenance</th><th>Remarque</th>
+      </tr></thead>
+      <tbody id="tbody-dispo"></tbody>
+    </table></div>
+  </div></div>
+  <div id="vmagasincentral" style="display:none">
+    <div class="cd">
+      <div class="sec-hd mc-pending"><i class="ti ti-clock" aria-hidden="true"></i> Retours en cours vers le Magasin Central (non encore reéus)</div>
+      <div style="overflow-x:auto"><table>
+        <thead><tr>
+          <th style="width:110px">Asset tag</th>
+          <th style="width:120px">N— Série</th>
+          <th style="width:120px">Modéle</th>
+          <th style="width:95px">Date sortie</th>
+          <th style="width:75px">Bloc. QS</th>
+          <th style="width:138px">Date exp. prévue</th>
+          <th style="width:75px;text-align:center">Expédié</th>
+        </tr></thead>
+        <tbody id="tbody-mc-pending"></tbody>
+      </table></div>
+    </div>
+    <div class="cd">
+      <div class="sec-hd mc-done"><i class="ti ti-check" aria-hidden="true"></i> Retours envoyés</div>
+      <div style="overflow-x:auto"><table>
+        <thead><tr>
+          <th style="width:110px">Asset tag</th>
+          <th style="width:120px">N— Série</th>
+          <th style="width:120px">Modéle</th>
+          <th style="width:95px">Date sortie</th>
+          <th style="width:130px">Date exp. prévue</th>
+          <th style="width:130px">Date exp. réelle</th>
+        </tr></thead>
+        <tbody id="tbody-mc-done"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+
+
+</div>
+<div class="mo" id="mo"><div class="md">
+  <h3 id="mtt">Modifier</h3>
+  <div class="fg">
+    <div class="fp"><label>N&deg; Asset tag</label><input type="text" id="ma"/></div>
+    <div class="fp"><label>Date</label><input type="date" id="md"/></div>
+    <div class="fp"><label>N&deg; Série</label><input type="text" id="mser"/></div>
+    <div class="fp"><label>Modéle</label><input type="text" id="mmod"/></div>
+    <div class="fp"><label>Agence provenance</label><input type="text" id="mag"/></div>
+    <div class="fp"><label>Blocage QS</label><select id="mqs"><option value="">—</option><option>Oui</option><option>Non</option></select></div>
+    <div class="fp"><label>Destination</label><select id="mds" onchange="onEditDestChange()"><option value="">—</option><option value="Soverp">Soverp</option><option value="Dinington">Dinington</option><option value="Maintenance">Maintenance</option><option value="Clients">Clients</option><option value="Magasin Central">Magasin Central</option></select></div>
+    <div class="fp wo-field" id="mwo-field"><label>N&deg; WO</label><input type="text" id="mwo"/></div>
+    <div class="fp f2"><label>Remarque</label><input type="text" id="mn"/></div>
+  </div>
+  <div class="br" style="margin-top:1.25rem">
+    <button class="bn" onclick="closeModal()"><i class="ti ti-x"></i> Annuler</button>
+    <button class="bn p" onclick="saveEdit()"><i class="ti ti-check"></i> Sauvegarder</button>
+  </div>
+</div></div>
+<div class="mo" id="mo-convert"><div class="md">
+  <h3>Basculer en sortie</h3>
+  <div style="background:var(--bg2);border-radius:var(--rm);padding:10px 14px;margin-bottom:1rem;font-size:13px;color:var(--tx2)">
+    <strong style="color:var(--tx)" id="co-asset"></strong>
+    &nbsp;&nbsp;N— Série : <span id="co-serie"></span>
+    &nbsp;&nbsp;Modéle : <span id="co-modele"></span>
+  </div>
+  <input type="hidden" id="co-id"/>
+  <div class="fg">
+    <div class="fp"><label>Date de sortie *</label><input type="date" id="co-date"/></div>
+    <div class="fp"><label>Destination *</label><select id="co-dest" onchange="onCoDestChange()"><option value="">— Sélectionner —</option><option value="Soverp">Soverp</option><option value="Dinington">Dinington</option><option value="Maintenance">Maintenance</option><option value="Clients">Clients</option><option value="Magasin Central">Magasin Central</option></select></div>
+    <div class="fp"><label>Blocage QS</label><select id="co-qs"><option value="">—</option><option>Oui</option><option>Non</option></select></div>
+    <div class="fp wo-field" id="co-wo-field"><label>N&deg; WO</label><input type="text" id="co-wo" placeholder="ex. WO-2024-001"/></div>
+    <div class="fp f2"><label>Remarque</label><input type="text" id="co-note" placeholder="Optionnel"/></div>
+  </div>
+  <div style="background:var(--gs);border-radius:var(--rm);padding:8px 14px;margin-top:10px;font-size:12px;color:var(--gt)">
+    <i class="ti ti-info-circle" aria-hidden="true"></i> Une nouvelle ligne Sortie sera crée. L'entrée originale est conservée.
+  </div>
+  <div class="br" style="margin-top:1.25rem">
+    <button class="bn" onclick="closeConvert()"><i class="ti ti-x"></i> Annuler</button>
+    <button class="bn p" onclick="saveConvert()"><i class="ti ti-arrow-right"></i> Créer la sortie</button>
+  </div>
+</div></div>
+
+<div class="lo" id="lo"><div class="lb"><div class="sp"></div>Enregistrement...</div></div>
+<div class="toast" id="toast"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const fb = initializeApp({
+  apiKey: "AIzaSyDv53luEaoSaX1fTCVCy1OVD7pIqkRlYEQ",
+  authDomain: "journal-machines.firebaseapp.com",
+  projectId: "journal-machines",
+  storageBucket: "journal-machines.firebasestorage.app",
+  messagingSenderId: "1038248860133",
+  appId: "1:1038248860133:web:f3089ef9141e2db3d9370c"
+});
+const db = getFirestore(fb);
+const AG = "Quimper";
+const COL = "mouvements";
+const ref = collection(db, COL);
+const qu = query(ref, orderBy("createdAt","desc"));
+let recs = []; let eid = null;
+const sb = document.getElementById("sb");
+onSnapshot(qu, sn => {
+  const allDocs = sn.docs.map(d => ({_id:d.id,...d.data()}));
+  recs = allDocs.filter(r => r.saisie === AG);
+  stats(); render(); renderDispo();
+  renderMagasinCentral();
+  sb.className = "sb on";
+  sb.innerHTML = '<i class="ti ti-wifi"></i> Synchronisé';
+}, () => {
+  sb.className = "sb off";
+  sb.innerHTML = '<i class="ti ti-wifi-off"></i> Hors ligne';
+});
+function today() { return new Date().toISOString().split("T")[0]; }
+function toast(m, e) {
+  const t = document.getElementById("toast");
+  t.textContent = m; t.style.background = e ? "#A32D2D" : "#1D9E75";
+  t.style.display = "block"; setTimeout(() => t.style.display = "none", 2500);
+}
+function load(on) { document.getElementById("lo").classList.toggle("open", on); }
+function getDispo() {
+  const sm = {}; const em = {};
+  recs.filter(r=>r.type==="Sortie").forEach(r=>{const k=r.asset.trim().toUpperCase();sm[k]=(sm[k]||0)+1;});
+  recs.filter(r=>r.type==="Entrée").forEach(r=>{const k=r.asset.trim().toUpperCase();em[k]=(em[k]||0)+1;});
+  const seen = new Set();
+  return recs.filter(r=>r.type==="Entrée").filter(r=>{
+    const k=r.asset.trim().toUpperCase();
+    if(seen.has(k)) return false;
+    if((em[k]||0)>(sm[k]||0)){seen.add(k);return true;}
+    return false;
+  });
+}
+function stats() {
+  document.getElementById("st").textContent = recs.length;
+  document.getElementById("si").textContent = recs.filter(r=>r.type==="Entrée").length;
+  document.getElementById("so").textContent = recs.filter(r=>r.type==="Sortie").length;
+  document.getElementById("sq").textContent = recs.filter(r=>r.qs==="Oui").length;
+  document.getElementById("sd").textContent = getDispo().length;
+}
+function switchTab(t) {
+  const tabs = ["entree","sortie","journal","dispo","magasincentral"
+  ];
+  tabs.forEach(v => {
+    document.getElementById("v"+v).style.display = v===t?"block":"none";
+    document.getElementById("t"+v).classList.toggle("active",v===t);
+  });
+  if(t==="journal") render();
+  if(t==="dispo") renderDispo();
+  if(t==="magasincentral") renderMagasinCentral();
+}
+// ── ENTRÉE ──────────────────────────────────────────────
+async function saveEntree() {
+  const asset=document.getElementById("ia").value.trim();
+  const date=document.getElementById("id").value;
+  const agence=document.getElementById("iag").value.trim();
+  if(!asset||!date||!agence){toast("Champs obligatoires manquants",true);return;}
+  const btn=document.getElementById("bin");btn.disabled=true;load(true);
+  try{
+    await addDoc(ref,{type:"Entrée",asset,date,saisie:AG,agence,
+      qs:document.getElementById("iqs").value,
+      numSerie:document.getElementById("inser").value.trim(),
+      modele:document.getElementById("imod").value.trim(),
+      dest:"—",note:document.getElementById("in").value.trim(),
+      createdAt:serverTimestamp()});
+    clearForm("i");toast("Entrée enregistrée ✓");
+  }catch(e){toast("Erreur: "+e.message,true);}
+  finally{btn.disabled=false;load(false);}
+}
+// ── SORTIE ──────────────────────────────────────────────
+function onDestChange() {
+  const dest=document.getElementById("odst").value;
+  const wo=document.getElementById("wo-field");
+  if(wo) wo.style.display=dest==="Clients"?"flex":"none";
+}
+async function saveSortie() {
+  const asset=document.getElementById("oa").value.trim();
+  const date=document.getElementById("od").value;
+  const dest=document.getElementById("odst").value;
+  if(!asset||!date||!dest){toast("Champs obligatoires manquants",true);return;}
+  const btn=document.getElementById("bout");btn.disabled=true;load(true);
+  try{
+    await addDoc(ref,{type:"Sortie",asset,date,saisie:AG,
+      agence:document.getElementById("oag").value.trim()||"—",
+      qs:document.getElementById("oqs").value,dest,
+      numSerie:document.getElementById("onser").value.trim(),
+      modele:document.getElementById("omod").value.trim(),
+      wo:document.getElementById("owo")?document.getElementById("owo").value.trim():"",
+      note:document.getElementById("on").value.trim(),
+      createdAt:serverTimestamp()});
+    clearForm("o");toast("Sortie enregistrée ✓");
+  }catch(e){toast("Erreur: "+e.message,true);}
+  finally{btn.disabled=false;load(false);}
+}
+function clearForm(p) {
+  if(p==="i"){
+    ["ia","iag","in","inser","imod"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+    document.getElementById("iqs").value="";
+    document.getElementById("id").value=today();
+  }else{
+    ["oa","oag","on","owo","onser","omod"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+    document.getElementById("oqs").value="";
+    document.getElementById("odst").value="";
+    const wo=document.getElementById("wo-field");if(wo)wo.style.display="none";
+    document.getElementById("od").value=today();
+  }
+}
+// ── BASCULE SORTIE depuis journal ───────────────────────
+function convertToSortie(id) {
+  const r=recs.find(x=>x._id===id);if(!r)return;
+  document.getElementById("co-asset").textContent=r.asset;
+  document.getElementById("co-serie").textContent=r.numSerie||"—";
+  document.getElementById("co-modele").textContent=r.modele||"—";
+  document.getElementById("co-id").value=id;
+  document.getElementById("co-date").value=today();
+  document.getElementById("co-dest").value="";
+  document.getElementById("co-qs").value=r.qs||"";
+  document.getElementById("co-note").value="";
+  document.getElementById("co-wo").value="";
+  const woField=document.getElementById("co-wo-field");if(woField)woField.style.display="none";
+  document.getElementById("mo-convert").classList.add("open");
+}
+function onCoDestChange() {
+  const dest=document.getElementById("co-dest").value;
+  const wo=document.getElementById("co-wo-field");
+  if(wo) wo.style.display=dest==="Clients"?"flex":"none";
+}
+async function saveConvert() {
+  const id=document.getElementById("co-id").value;
+  const date=document.getElementById("co-date").value;
+  const dest=document.getElementById("co-dest").value;
+  if(!date||!dest){toast("Date et destination obligatoires",true);return;}
+  const r=recs.find(x=>x._id===id);if(!r)return;
+  load(true);
+  try{
+    await addDoc(ref,{type:"Sortie",asset:r.asset,
+      numSerie:r.numSerie||"",modele:r.modele||"",
+      date,saisie:AG,agence:r.agence||"—",
+      qs:document.getElementById("co-qs").value,dest,
+      wo:document.getElementById("co-wo").value.trim(),
+      note:document.getElementById("co-note").value.trim(),
+      createdAt:serverTimestamp()});
+    closeConvert();toast("Sortie crée ✓");
+  }catch(e){toast("Erreur: "+e.message,true);}
+  finally{load(false);}
+}
+function closeConvert(){document.getElementById("mo-convert").classList.remove("open");}
+// ── VUE MAGASIN CENTRAL (agences) ───────────────────────
+// Sorties de cette agence vers Magasin Central
+function renderMagasinCentral() {
+  const mc_sorties = recs.filter(r => r.type==="Sortie" && r.dest==="Magasin Central");
+  const pending = mc_sorties.filter(r => !r.expedie && !r.dateExpReelle);
+  const done = mc_sorties.filter(r => r.expedie || r.dateExpReelle);
+  const tbP = document.getElementById("tbody-mc-pending");
+  const tbD = document.getElementById("tbody-mc-done");
+  if(!pending.length){
+    tbP.innerHTML='<tr><td colspan="7"><div class="em"><i class="ti ti-building" style="font-size:28px;display:block;margin-bottom:8px"></i>Aucun retour en attente vers le Magasin Central</div></td></tr>';
+  }else{
+    tbP.innerHTML=pending.map(r=>{
+      const prev=r.dateExpPrevue||"";
+      return '<tr>'
+        +'<td style="font-weight:500">'+r.asset+'</td>'
+        +'<td>'+(r.numSerie||"—")+'</td>'
+        +'<td>'+(r.modele||"—")+'</td>'
+        +'<td>'+r.date+'</td>'
+        +'<td>'+(r.qs?'<span class="bg bg-d">'+r.qs+'</span>':"—")+'</td>'
+        +'<td><input type="date" value="'+prev+'" data-id="'+r._id+'" onchange="saveMcDatePrevue(this)" style="height:30px;font-size:12px;padding:4px 8px;width:130px"/></td>'
+        +'<td style="text-align:center"><input type="checkbox" '+(r.expedie?"checked":"")+' data-id="'+r._id+'" onchange="toggleMcExpedition(this)" style="width:18px;height:18px;cursor:pointer;accent-color:var(--pr)"/></td>'
+        +'</tr>';
+    }).join("");
+  }
+  if(!done.length){
+    tbD.innerHTML='<tr><td colspan="6"><div class="em"><i class="ti ti-check" style="font-size:28px;display:block;margin-bottom:8px"></i>Aucun retour envoyé</div></td></tr>';
+  }else{
+    tbD.innerHTML=done.map(r=>'<tr>'
+      +'<td style="font-weight:500">'+r.asset+'</td>'
+      +'<td>'+(r.numSerie||"—")+'</td>'
+      +'<td>'+(r.modele||"—")+'</td>'
+      +'<td>'+r.date+'</td>'
+      +'<td>'+(r.dateExpPrevue||"—")+'</td>'
+      +'<td>'+(r.dateExpReelle||r.date)+'</td>'
+      +'</tr>'
+    ).join("");
+  }
+}
+async function saveMcDatePrevue(input) {
+  load(true);
+  try{await updateDoc(doc(db,COL,input.dataset.id),{dateExpPrevue:input.value});toast("Date prévue mise — jour ✓");}
+  catch(e){toast("Erreur: "+e.message,true);}
+  finally{load(false);}
+}
+async function toggleMcExpedition(checkbox) {
+  const expedie=checkbox.checked;
+  load(true);
+  try{
+    await updateDoc(doc(db,COL,checkbox.dataset.id),{expedie,dateExpReelle:expedie?today():""});
+    toast(expedie?"Marché expédiée ✓":"Remis en attente");
+  }catch(e){toast("Erreur: "+e.message,true);}
+  finally{load(false);}
+}
+// ── JOURNAL ──────────────────────────────────────────────
+function filtered(){
+  const q2=(document.getElementById("fs").value||"").toLowerCase();
+  const ft=document.getElementById("ft").value||"";
+  return recs.filter(r=>{
+    const mq=!q2||Object.values(r).some(v=>String(v).toLowerCase().includes(q2));
+    return mq&&(!ft||r.type===ft);
+  });
+}
+function render(){
+  const f=filtered();
+  const tb=document.getElementById("tbody");
+  if(!f.length){tb.innerHTML='<tr><td colspan="11"><div class="em"><i class="ti ti-inbox" style="font-size:28px;display:block;margin-bottom:8px"></i>Aucun enregistrement</div></td></tr>';return;}
+  tb.innerHTML=f.map(r=>{
+    const qs=r.qs?'<span class="bg '+(r.qs==="Oui"?"bg-d":"")+'">'+r.qs+'</span>':"—";
+    const dst=(r.dest&&r.dest!=="—")?'<span class="bg bg-i">'+r.dest+'</span>':"—";
+    const isE=r.type==="Entrée";
+    return '<tr>'
+      +'<td style="font-weight:500">'+r.asset+'</td>'
+      +'<td><span class="bg '+(isE?"bg-s":"bg-w")+'">'+r.type+'</span></td>'
+      +'<td>'+r.date+'</td>'
+      +'<td>'+(r.numSerie||"—")+'</td>'
+      +'<td>'+(r.modele||"—")+'</td>'
+      +'<td>'+(r.agence||"—")+'</td>'
+      +'<td>'+qs+'</td>'
+      +'<td>'+dst+'</td>'
+      +'<td>'+(r.wo?'<span class="bg bg-p">WO:'+r.wo+'</span>':"—")+'</td>'
+      +'<td style="color:var(--tx2)">'+(r.note||"—")+'</td>'
+      +'<td style="white-space:nowrap">'
+      +(isE?'<button class="bn sm o bconv" data-id="'+r._id+'" title="Basculer en sortie" style="margin-right:4px"><i class="ti ti-arrow-right"></i></button>':'')
+      +'<button class="bn sm be" data-id="'+r._id+'" title="Modifier"><i class="ti ti-edit"></i></button>'
+      +'<button class="bn sm d bd" data-id="'+r._id+'" title="Supprimer" style="margin-left:4px"><i class="ti ti-trash"></i></button>'
+      +'</td></tr>';
+  }).join("");
+  document.querySelectorAll(".bconv").forEach(b=>b.onclick=()=>convertToSortie(b.dataset.id));
+  document.querySelectorAll(".be").forEach(b=>b.onclick=()=>edit(b.dataset.id));
+  document.querySelectorAll(".bd").forEach(b=>b.onclick=()=>del(b.dataset.id));
+}
+function renderDispo(){
+  const dispo=getDispo();
+  const tb=document.getElementById("tbody-dispo");
+  if(!dispo.length){tb.innerHTML='<tr><td colspan="6"><div class="em"><i class="ti ti-circle-check" style="font-size:28px;display:block;margin-bottom:8px"></i>Aucune machine disponible</div></td></tr>';return;}
+  tb.innerHTML=dispo.map(r=>'<tr>'
+    +'<td style="font-weight:500">'+r.asset+'</td>'
+    +'<td>'+(r.numSerie||"—")+'</td>'
+    +'<td>'+(r.modele||"—")+'</td>'
+    +'<td>'+r.date+'</td>'
+    +'<td>'+(r.agence||"—")+'</td>'
+    +'<td style="color:var(--tx2)">'+(r.note||"—")+'</td>'
+    +'</tr>'
+  ).join("");
+}
+function edit(id){
+  eid=id;const r=recs.find(x=>x._id===id);if(!r)return;
+  document.getElementById("ma").value=r.asset||"";
+  document.getElementById("md").value=r.date||"";
+  document.getElementById("mser").value=r.numSerie||"";
+  document.getElementById("mmod").value=r.modele||"";
+  document.getElementById("mag").value=r.agence==="—"?"":(r.agence||"");
+  document.getElementById("mqs").value=r.qs||"";
+  document.getElementById("mds").value=r.dest==="—"?"":(r.dest||"");
+  document.getElementById("mwo").value=r.wo||"";
+  document.getElementById("mn").value=r.note||"";
+  document.getElementById("mtt").textContent="Modifier — "+r.asset+" ("+r.type+")";
+  const woRow=document.getElementById("mwo-field");
+  if(woRow)woRow.style.display=(r.dest==="Clients")?"flex":"none";
+  document.getElementById("mo").classList.add("open");
+}
+function onEditDestChange(){
+  const dest=document.getElementById("mds").value;
+  const wo=document.getElementById("mwo-field");
+  if(wo)wo.style.display=dest==="Clients"?"flex":"none";
+}
+async function saveEdit(){
+  if(!eid)return;load(true);
+  try{
+    await updateDoc(doc(db,COL,eid),{
+      asset:document.getElementById("ma").value.trim(),
+      date:document.getElementById("md").value,
+      numSerie:document.getElementById("mser").value.trim(),
+      modele:document.getElementById("mmod").value.trim(),
+      agence:document.getElementById("mag").value.trim()||"—",
+      qs:document.getElementById("mqs").value,
+      dest:document.getElementById("mds").value||"—",
+      wo:document.getElementById("mwo").value.trim(),
+      note:document.getElementById("mn").value.trim()
+    });
+    closeModal();toast("Modifié ✓");
+  }catch(e){toast("Erreur: "+e.message,true);}
+  finally{load(false);}
+}
+function closeModal(){document.getElementById("mo").classList.remove("open");eid=null;}
+async function del(id){
+  const r=recs.find(x=>x._id===id);if(!r)return;
+  if(!confirm("Supprimer "+r.asset+" ?"))return;
+  load(true);
+  try{await deleteDoc(doc(db,COL,id));toast("Supprimé");}
+  catch(e){toast("Erreur: "+e.message,true);}
+  finally{load(false);}
+}
+function exportCSV(){
+  const f=filtered();
+  if(!f.length){toast("Aucune donnée",true);return;}
+  const h=["Asset tag","Type","Date","N° Série","Modèle","Agence provenance","Blocage QS","Destination","N° WO","Remarque"];
+  const rows=f.map(r=>[r.asset,r.type,r.date,r.numSerie||"",r.modele||"",r.agence,r.qs||"",r.dest,r.wo||"",r.note]
+    .map(v=>{const s=String(v||"");return '"'+s.replace(/"/g,'""')+'"'}).join(","));
+  const sep="\r\n";
+  const csv="\uFEFF"+[h.join(",")].concat(rows).join(sep);
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download="journal_quimper_"+today()+".csv";
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  toast("Export ✓");
+}
+async function importExcel(file){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=async function(e){
+    const wb=window.XLSX.read(e.target.result,{type:"binary"});
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    const rows=window.XLSX.utils.sheet_to_json(ws,{defval:""});
+    if(!rows.length){toast("Fichier vide",true);return;}
+    load(true);let count=0;
+    for(const row of rows){
+      const asset=(row["Asset tag"]||row["asset"]||"").toString().trim();
+      const date=(row["Date"]||"").toString().trim();
+      const agence=(row["Agence provenance"]||row["agence"]||"").toString().trim();
+      if(!asset||!date)continue;
+      await addDoc(ref,{type:"Entrée",asset,date,saisie:AG,agence,
+        numSerie:(row["N° Série"]||"").toString().trim(),
+        modele:(row["Modèle"]||"").toString().trim(),
+        qs:(row["Blocage QS"]||"").toString().trim(),
+        dest:"—",note:(row["Remarque"]||"").toString().trim(),
+        createdAt:serverTimestamp()});
+      count++;
+    }
+    load(false);toast(count+" importée(s) ✓");
+  };
+  reader.readAsBinaryString(file);
+}
+// ── INIT ────────────────────────────────────────────────
+document.getElementById("mo").addEventListener("click",e=>{if(e.target===document.getElementById("mo"))closeModal();});
+document.getElementById("mo-convert").addEventListener("click",e=>{if(e.target===document.getElementById("mo-convert"))closeConvert();});
+document.getElementById("id").value=today();
+document.getElementById("od").value=today();
+const dz=document.getElementById("dropzone");
+const fi=document.getElementById("file-input");
+dz.addEventListener("dragover",e=>{e.preventDefault();dz.classList.add("over");});
+dz.addEventListener("dragleave",()=>dz.classList.remove("over"));
+dz.addEventListener("drop",e=>{e.preventDefault();dz.classList.remove("over");importExcel(e.dataTransfer.files[0]);});
+dz.addEventListener("click",()=>fi.click());
+fi.addEventListener("change",()=>importExcel(fi.files[0]));
+window.switchTab=switchTab;window.saveEntree=saveEntree;window.saveSortie=saveSortie;
+window.clearForm=clearForm;window.saveEdit=saveEdit;window.closeModal=closeModal;
+window.exportCSV=exportCSV;window.render=render;window.renderDispo=renderDispo;
+window.onDestChange=onDestChange;window.onCoDestChange=onCoDestChange;
+window.saveConvert=saveConvert;window.closeConvert=closeConvert;
+window.onEditDestChange=onEditDestChange;
+window.renderMagasinCentral=renderMagasinCentral;
+window.saveMcDatePrevue=saveMcDatePrevue;
+window.toggleMcExpedition=toggleMcExpedition;
+</script>
+</body></html>
